@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/const/AppColors.dart';
+import 'package:flutter_ecommerce/ui/bottom_nav_controller.dart';
 import 'package:flutter_ecommerce/ui/home_screen.dart';
 import 'package:flutter_ecommerce/ui/registration_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,6 +19,31 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   bool _obscureText =true;
+  singIn() async{
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
+      );
+      var authCredential = userCredential.user;
+      print(authCredential!.uid);
+      if(authCredential.uid.isNotEmpty){
+        Navigator.push(context, CupertinoPageRoute(builder: (context)=>BottomNavController()));
+      }
+      else{
+        Fluttertoast.showToast(msg: "Something is wrong");
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        //print('No user found for that email.');
+        Fluttertoast.showToast(msg: "No user found for that email.");
+      } else if (e.code == 'wrong-password') {
+        //print('Wrong password provided for that user.');
+        Fluttertoast.showToast(msg: "Wrong password provided for that user.");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -154,9 +181,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             SizedBox(height: 50.h,),
                             ElevatedButton(
                                 onPressed: (){
-                                  Navigator.push(context, CupertinoPageRoute(builder: (context)=>HomeScreen()));
+                                  //singIn();
+                                  Navigator.push(context, CupertinoPageRoute(builder: (context)=>BottomNavController()));
                                 },
                                 style: ElevatedButton.styleFrom(
+                                  elevation: 10,
                                   backgroundColor: AppColors.orange,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.r),
