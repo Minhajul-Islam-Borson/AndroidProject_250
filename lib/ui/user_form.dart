@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/ui/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 class UserForm extends StatefulWidget {
   const UserForm({super.key});
 
@@ -10,6 +12,28 @@ class UserForm extends StatefulWidget {
 
 class _UserFormState extends State<UserForm> {
   final _formKey = GlobalKey<FormState>();
+
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _dobController = TextEditingController();
+  TextEditingController _genderController = TextEditingController();
+  TextEditingController _ageController = TextEditingController();
+
+  sendUserDataToDB()async{
+
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    var currentUser = _auth.currentUser;
+
+    CollectionReference _collectionRef = FirebaseFirestore.instance.collection("user-form-data");
+    return _collectionRef.doc(currentUser!.email).set({
+      "name":_nameController.text,
+      "phone":_phoneController.text,
+      "dob": _dobController.text,
+      "gender": _genderController.text,
+      "age": _ageController.text,
+    }).then((value) => Navigator.push(context,MaterialPageRoute(builder: (_)=> LoginScreen()))) .catchError((error)=>print("Object not found"));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,15 +59,18 @@ class _UserFormState extends State<UserForm> {
                   child: Column(
                     children: [
                       TextFormField(
+                        controller: _nameController,
                         decoration: InputDecoration(labelText: "Full Name",),
                       ),
                       SizedBox(height: 10),
                       TextFormField(
+                        controller: _phoneController,
                         decoration: InputDecoration(labelText: "Phone Number"),
                         keyboardType: TextInputType.phone,
                       ),
                       SizedBox(height: 10),
                       TextFormField(
+                        controller: _dobController,
                         decoration: InputDecoration(labelText: "Date of Birth"),
                       ),
                       SizedBox(height: 10),
@@ -55,10 +82,13 @@ class _UserFormState extends State<UserForm> {
                             child: Text(value),
                           );
                         }).toList(),
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          _genderController.text = value!;
+                        },
                       ),
                       SizedBox(height: 10),
                       TextFormField(
+                        controller: _ageController,
                         decoration: InputDecoration(labelText: "Age"),
                         keyboardType: TextInputType.number,
                       ),
@@ -71,9 +101,7 @@ class _UserFormState extends State<UserForm> {
                             padding: EdgeInsets.symmetric(vertical: 15),
                           ),
                           onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              Navigator.push(context, CupertinoPageRoute(builder: (context)=> LoginScreen()));
-                            }
+                            sendUserDataToDB();
                           },
                           child: Text("Submit", style: TextStyle(color: Colors.white)),
                         ),

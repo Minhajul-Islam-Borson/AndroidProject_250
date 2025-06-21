@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/settings.dart';
 
 class Profile extends StatelessWidget {
   final Widget? previousPage;
@@ -86,21 +87,23 @@ class Profile extends StatelessWidget {
             _buildOrderTile(Icons.local_shipping, "Shipped"),
             _buildOrderTile(Icons.assignment_return, "Return"),
             _buildOrderTile(Icons.payment, "Payment Method"),
-            _buildOrderTile(Icons.settings, "Settings"),
+            _buildOrderTile(Icons.settings, "Settings", onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => Settings()));
+            }),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildOrderTile(IconData icon, String title) {
+  Widget _buildOrderTile(IconData icon, String title, {VoidCallback? onTap}) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
         leading: Icon(icon, color: Colors.blue),
         title: Text(title, style: TextStyle(fontSize: 16)),
         trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-        onTap: () {},
+        onTap: onTap,
       ),
     );
   }

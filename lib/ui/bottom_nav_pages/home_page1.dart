@@ -5,16 +5,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/const/AppColors.dart';
 import 'package:flutter_ecommerce/ui/login_screen.dart';
+import 'package:flutter_ecommerce/ui/product_details_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+import '../search_screen.dart';
+
+class HomePage1 extends StatefulWidget {
+  const HomePage1({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePage1> createState() => _HomePage1State();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePage1State extends State<HomePage1> {
   TextEditingController _searchController = TextEditingController();
 
   List<String> _carouselImages = [];
@@ -31,7 +34,6 @@ class _HomePageState extends State<HomePage> {
       print(_carouselImages); // For debugging, remove in production
     });
   }
-
   fetchProducts() async {
     QuerySnapshot qn = await _firestoreInstance.collection("products").get();
     setState(() {
@@ -47,9 +49,6 @@ class _HomePageState extends State<HomePage> {
 
     return qn.docs;
   }
-
-
-
   @override
   void initState() {
     super.initState();
@@ -78,25 +77,35 @@ class _HomePageState extends State<HomePage> {
               Row(
                 children: [
                   Expanded(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.r),
-                      child: TextFormField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          filled: true,
-                          contentPadding:
-                          EdgeInsets.symmetric(vertical: 18.h, horizontal: 15.w),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.r),
-                            borderSide: BorderSide(color: Colors.blue),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(builder: (_) => SearchScreen()),
+                        );
+                      },
+                      child: AbsorbPointer(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.r),
+                          child: TextFormField(
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              fillColor: Colors.white,
+                              filled: true,
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 18.h, horizontal: 15.w),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.r),
+                                borderSide: BorderSide(color: Colors.blue),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.r),
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              hintText: "Search Product Here",
+                              hintStyle: TextStyle(fontSize: 15.sp),
+                            ),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.r),
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          hintText: "Search Product Here",
-                          hintStyle: TextStyle(fontSize: 15.sp),
                         ),
                       ),
                     ),
@@ -117,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        CupertinoPageRoute(builder: (context) => LoginScreen()),
+                        CupertinoPageRoute(builder: (context) => SearchScreen()),
                       );
                     },
                   ),
@@ -134,14 +143,14 @@ class _HomePageState extends State<HomePage> {
                         (item) => Padding(
                       padding:
                       const EdgeInsets.symmetric(horizontal: 3),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(item),
-                            fit: BoxFit.fitWidth,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12.r), // Rounded corners
+                            child: Image.network(
+                              item,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                            ),
                           ),
-                        ),
-                      ),
                     ),
                   )
                       .toList(),
@@ -189,18 +198,21 @@ class _HomePageState extends State<HomePage> {
                   //itemCount: 10,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 1),
                   itemBuilder: (context, index) {
-                    return Card(
+                    return GestureDetector(
+                      onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetailsScreen(_products[index]))),
+                      child: Card(
                         elevation: 3,
                         child: Column(
                           children: [
                             AspectRatio(aspectRatio: 1.3,
                               child: Container(
-                                  color: Colors.orange,
+                                color: Colors.orange,
                                   child: Image.network(_products[index]["product-img"][0])),),
                             Text("${_products[index]["product-name"]}"),
                             Text("৳${_products[index]["product-price"].toString()}"),
                           ],
                         )
+                      ),
                     );
                   },
                 ),

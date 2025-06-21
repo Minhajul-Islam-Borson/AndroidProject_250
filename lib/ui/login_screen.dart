@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/const/AppColors.dart';
 import 'package:flutter_ecommerce/ui/bottom_nav_controller.dart';
 import 'package:flutter_ecommerce/ui/home_screen.dart';
+import 'package:flutter_ecommerce/ui/registration_screen1.dart';
 import 'package:flutter_ecommerce/ui/registration_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -19,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   bool _obscureText =true;
-  singIn() async{
+  signIn() async{
     try {
       UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailController.text,
@@ -30,16 +31,22 @@ class _LoginScreenState extends State<LoginScreen> {
       if(authCredential.uid.isNotEmpty){
         Navigator.push(context, CupertinoPageRoute(builder: (context)=>BottomNavController()));
       }
-      else{
-        Fluttertoast.showToast(msg: "Something is wrong");
+      else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Something is wrong")),
+        );
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         //print('No user found for that email.');
-        Fluttertoast.showToast(msg: "No user found for that email.");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("No user found for that email."), backgroundColor: Colors.red),
+        );
       } else if (e.code == 'wrong-password') {
         //print('Wrong password provided for that user.');
-        Fluttertoast.showToast(msg: "Wrong password provided for that user.");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Wrong password provided for that user."), backgroundColor: Colors.red),
+        );
       }
     }
   }
@@ -181,8 +188,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             SizedBox(height: 50.h,),
                             ElevatedButton(
                                 onPressed: (){
-                                  //singIn();
-                                  Navigator.push(context, CupertinoPageRoute(builder: (context)=>BottomNavController()));
+                                  signIn();
+                                  //Navigator.push(context, CupertinoPageRoute(builder: (context)=>BottomNavController()));
                                 },
                                 style: ElevatedButton.styleFrom(
                                   elevation: 10,
@@ -192,7 +199,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   minimumSize: Size(double.infinity,50.h),
                                 ),
-                                child: Text("Sing In", style: TextStyle(fontSize: 16.sp,color: Colors.white),)
+                                child: Text("Sign In", style: TextStyle(fontSize: 16.sp,color: Colors.white),)
                             ),
                             SizedBox(height: 20.h,),
                             Center(
@@ -202,7 +209,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   GestureDetector(
                                     child: Text("Sing Up",style: TextStyle(fontSize: 13.sp,fontWeight: FontWeight.w600,color: AppColors.orange),),
                                     onTap: (){
-                                      Navigator.push(context, CupertinoPageRoute(builder: (context)=>RegistrationScreen()));
+                                      Navigator.push(context, CupertinoPageRoute(builder: (context)=> RegistrationScreen()));
                                     },
                                   )
                                 ],

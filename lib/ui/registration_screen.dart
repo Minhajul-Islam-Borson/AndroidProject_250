@@ -18,11 +18,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
 
-  singUp() async{
+  signUp() async{
     try {
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
       );
       var authCredential = userCredential.user;
       print(authCredential!.uid);
@@ -257,7 +257,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           height: 56.h,
                           child: ElevatedButton(
                             onPressed: () {
-                              singUp();
+                              signUp();
                               //Navigator.push(context, CupertinoPageRoute(builder: (context)=> UserForm()));
                             },
                             child: Text(
