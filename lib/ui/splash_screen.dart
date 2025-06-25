@@ -13,6 +13,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  @override
   void initState() {
     super.initState(); // Fix: Call super.initState() first
 
@@ -35,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Text("E-Commerce", style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold ,fontSize: 44.sp),),
             SizedBox(height: 10,),
-            Container(
+            SizedBox(
               height: 200,
               width: 200,
               child: Card(

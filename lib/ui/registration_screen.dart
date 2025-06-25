@@ -8,14 +8,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({super.key});
+
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   //TextEditingController _numberController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
 
   signUp() async{
@@ -260,14 +262,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               signUp();
                               //Navigator.push(context, CupertinoPageRoute(builder: (context)=> UserForm()));
                             },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.orange,
+                              elevation: 3,
+                            ),
                             child: Text(
                               "Continue",
                               style: TextStyle(
                                   color: Colors.white, fontSize: 18.sp),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.orange,
-                              elevation: 3,
                             ),
                           ),
                         ),

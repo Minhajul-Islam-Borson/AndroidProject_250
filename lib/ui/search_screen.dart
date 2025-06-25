@@ -39,7 +39,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         .orderBy("search-name")
                         .where("search-name",
                             isGreaterThanOrEqualTo: inputText.toLowerCase())
-                        .where("search-name",isLessThan: inputText.toLowerCase()+'z')
+                        .where("search-name",isLessThan: '${inputText.toLowerCase()}z')
                         .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {

@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/ui/product_details_screen.dart';
 
+import '../bottom_nav_controller.dart';
+
 class Favourite extends StatefulWidget {
   const Favourite({super.key});
 
@@ -18,6 +20,25 @@ class _FavouriteState extends State<Favourite> {
     // Safety check in case user is not logged in
     if (userEmail == null) {
       return Scaffold(
+        appBar: AppBar(
+          title: Text("Favourite Items"),
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+            onPressed: () {
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context);
+              } else {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => BottomNavController()),
+                );
+              }
+            },
+          ),
+        ),
         body: Center(child: Text("Please log in to see your favourites.")),
       );
     }
@@ -25,7 +46,22 @@ class _FavouriteState extends State<Favourite> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Favourite Items"),
-        backgroundColor: Colors.orange,
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+          onPressed: () {
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => BottomNavController()),
+              );
+            }
+          },
+        ),
       ),
       body: SafeArea(
         child: StreamBuilder<QuerySnapshot>(
@@ -56,10 +92,10 @@ class _FavouriteState extends State<Favourite> {
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (_, index) {
-                DocumentSnapshot _documentSnapshot = snapshot.data!.docs[index];
+                DocumentSnapshot documentSnapshot = snapshot.data!.docs[index];
 
                 // Get document data safely
-                final data = _documentSnapshot.data() as Map<String, dynamic>;
+                final data = documentSnapshot.data() as Map<String, dynamic>;
 
                 return GestureDetector(
                   onTap: () {
@@ -100,7 +136,7 @@ class _FavouriteState extends State<Favourite> {
                               .collection("users-favourite-items")
                               .doc(userEmail)
                               .collection("items")
-                              .doc(_documentSnapshot.id)
+                              .doc(documentSnapshot.id)
                               .delete();
                         },
                       ),

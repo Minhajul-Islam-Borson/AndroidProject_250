@@ -13,19 +13,19 @@ class UserForm extends StatefulWidget {
 class _UserFormState extends State<UserForm> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
-  TextEditingController _dobController = TextEditingController();
-  TextEditingController _genderController = TextEditingController();
-  TextEditingController _ageController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _dobController = TextEditingController();
+  final TextEditingController _genderController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
 
   sendUserDataToDB()async{
 
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    var currentUser = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    var currentUser = auth.currentUser;
 
-    CollectionReference _collectionRef = FirebaseFirestore.instance.collection("user-form-data");
-    return _collectionRef.doc(currentUser!.email).set({
+    CollectionReference collectionRef = FirebaseFirestore.instance.collection("user-form-data");
+    return collectionRef.doc(currentUser!.email).set({
       "name":_nameController.text,
       "phone":_phoneController.text,
       "dob": _dobController.text,

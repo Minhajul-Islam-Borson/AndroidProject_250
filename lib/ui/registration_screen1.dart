@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_ecommerce/ui/user_form.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_ecommerce/const/AppColors.dart';
 
 class RegistrationScreen1 extends StatefulWidget {

@@ -12,7 +12,7 @@ import '../const/AppColors.dart'; // Optional, if using ScreenUtil
 
 class ProductDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> _product;
-  ProductDetailsScreen(this._product, {super.key});
+  const ProductDetailsScreen(this._product, {super.key});
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
@@ -21,10 +21,10 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int _dotPosition = 0;
   Future addToCart()async{
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    var currentUser = _auth.currentUser;
-    CollectionReference _collectionRef = FirebaseFirestore.instance.collection("users-cart-items");
-    return _collectionRef.doc(currentUser!.email).collection("items").doc().set(
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    var currentUser = auth.currentUser;
+    CollectionReference collectionRef = FirebaseFirestore.instance.collection("users-cart-items");
+    return collectionRef.doc(currentUser!.email).collection("items").doc().set(
       {
         "name" : widget._product["product-name"],
         "price" : widget._product["product-price"],
@@ -41,10 +41,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   Future addToFavourite()async{
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    var currentUser = _auth.currentUser;
-    CollectionReference _collectionRef = FirebaseFirestore.instance.collection("users-favourite-items");
-    return _collectionRef.doc(currentUser!.email).collection("items").doc().set(
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    var currentUser = auth.currentUser;
+    CollectionReference collectionRef = FirebaseFirestore.instance.collection("users-favourite-items");
+    return collectionRef.doc(currentUser!.email).collection("items").doc().set(
         {
           "name" : widget._product["product-name"],
           "price" : widget._product["product-price"],
@@ -172,7 +172,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ),
               SizedBox(height: 5.h,),
               Text(
-                "\Price ৳${widget._product['product-price'].toString()}",
+                "Price ৳${widget._product['product-price'].toString()}",
                 textAlign: TextAlign.left,
                 style: TextStyle(
                     fontWeight: FontWeight.bold, fontSize: 30, color: Colors.red),
@@ -189,15 +189,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 height: 56.h,
                 child: ElevatedButton(
                     onPressed: ()=>addToCart(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    elevation: 3,
+                  ),
                     //onPressed: ()=>Navigator.push(context, CupertinoPageRoute(builder: (context)=>Cart())),
                     child: Text(
                       "Add to cart",
                       style: TextStyle(color: Colors.white,fontSize: 18.sp),
                     ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    elevation: 3,
-                  ),
                 ),
               ),
             ],

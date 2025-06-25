@@ -18,12 +18,12 @@ class HomePage1 extends StatefulWidget {
 }
 
 class _HomePage1State extends State<HomePage1> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   List<String> _carouselImages = [];
   var _dotPosition = 0;
-  List<Map<String, dynamic>> _products = [];
-  var _firestoreInstance = FirebaseFirestore.instance;
+  final List<Map<String, dynamic>> _products = [];
+  final _firestoreInstance = FirebaseFirestore.instance;
 
   // Fetch images from Firestore collection "home-slider"
   fetchCarouselImages() async {
