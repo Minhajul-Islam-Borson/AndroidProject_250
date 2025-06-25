@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/my_location.dart';
 import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/settings.dart' as my_settings;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -73,15 +74,19 @@ class Profile extends StatelessWidget {
               _buildOrderTile(Icons.inventory_2_outlined, "All Orders"),
               //_buildOrderTile(Icons.autorenew, "Processing"),
               //_buildOrderTile(Icons.local_shipping, "Shipped"),
-              _buildOrderTile(Icons.my_location, "My Location"),
-              _buildOrderTile(Icons.payment, "Payment Method"),
-
-              _buildOrderTile(Icons.settings, "Settings", onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const my_settings.Settings()),
-                );
+              _buildOrderTile(Icons.my_location, "My Location", onTap: (){
+                print("Navigating to my location");
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>MyLocation()));
               }),
+              _buildOrderTile(Icons.payment, "Payment Method"),
+              _buildOrderTile(Icons.my_location, "My Location", onTap: () {
+                  print("Navigating to MyLocation...");
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyLocation()),
+                  );
+                }),
+
 
               const SizedBox(height: 10),
 
