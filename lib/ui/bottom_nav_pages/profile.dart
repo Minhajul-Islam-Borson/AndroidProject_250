@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/my_location.dart';
-import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/settings.dart' as my_settings;
+import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/settings.dart'as my_settings;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -20,8 +20,11 @@ class Profile extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: const Text("Account",
-            style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
+        title: const Text(
+          "Account",
+          style: TextStyle(
+              color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
@@ -39,7 +42,14 @@ class Profile extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.more_vert, color: Colors.black),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => const my_settings
+                        .Settings()), //Open Settings from AppBar
+              );
+            },
           ),
         ],
       ),
@@ -49,79 +59,86 @@ class Profile extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //Show profile info or placeholder if not signed in
               userEmail == null
                   ? _buildGuestProfile()
                   : StreamBuilder<DocumentSnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection("user-form-data")
-                    .doc(userEmail)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  String name = "Guest User";
-                  if (snapshot.hasData && snapshot.data!.exists) {
-                    final data = snapshot.data!.data() as Map<String, dynamic>;
-                    name = data['name'] ?? name;
-                  }
-                  return _buildProfileCard(name, userEmail);
-                },
-              ),
+                      stream: FirebaseFirestore.instance
+                          .collection("user-form-data")
+                          .doc(userEmail)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        String name = "Guest User";
+                        if (snapshot.hasData && snapshot.data!.exists) {
+                          final data =
+                              snapshot.data!.data() as Map<String, dynamic>;
+                          name = data['name'] ?? name;
+                        }
+                        return _buildProfileCard(name, userEmail);
+                      },
+                    ),
 
               const SizedBox(height: 20),
-              const Text("My Orders", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text("My Orders",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
 
               _buildOrderTile(Icons.inventory_2_outlined, "All Orders"),
-              //_buildOrderTile(Icons.autorenew, "Processing"),
-              //_buildOrderTile(Icons.local_shipping, "Shipped"),
-              _buildOrderTile(Icons.my_location, "My Location", onTap: (){
-                print("Navigating to my location");
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>MyLocation()));
+              _buildOrderTile(Icons.my_location, "My Location", onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyLocation()),
+                );
               }),
               _buildOrderTile(Icons.payment, "Payment Method"),
-              _buildOrderTile(Icons.my_location, "My Location", onTap: () {
-                  print("Navigating to MyLocation...");
-                  Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyLocation()),
-                  );
-                }),
 
+              _buildOrderTile(Icons.settings, "Settings", onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const my_settings.Settings()),
+                );
+              }),
 
               const SizedBox(height: 10),
 
-              //Sign Out if signed in, otherwise Login
+              //Login/Sign Out logic
               userEmail == null
                   ? _buildOrderTile(Icons.login, "Login", onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginScreen()));
-              })
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const LoginScreen()),
+                      );
+                    })
                   : _buildOrderTile(Icons.logout, "Sign Out", onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text("Confirm Sign Out"),
-                    content: const Text("Are you sure you want to sign out?"),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: const Text("No"),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          Navigator.of(context).pop();
-                          await FirebaseAuth.instance.signOut();
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (_) => const BottomNavController()),
-                                (route) => false,
-                          );
-                        },
-                        child: const Text("Yes"),
-                      ),
-                    ],
-                  ),
-                );
-              }),
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text("Confirm Sign Out"),
+                          content:
+                              const Text("Are you sure you want to sign out?"),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text("No"),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                Navigator.of(context).pop();
+                                await FirebaseAuth.instance.signOut();
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) =>
+                                          const BottomNavController()),
+                                  (route) => false,
+                                );
+                              },
+                              child: const Text("Yes"),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
             ],
           ),
         ),
@@ -160,9 +177,9 @@ class Profile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(name,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              Text(email ?? '',
-                  style: const TextStyle(color: Colors.grey)),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold)),
+              Text(email ?? '', style: const TextStyle(color: Colors.grey)),
               const SizedBox(height: 4),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -170,7 +187,7 @@ class Profile extends StatelessWidget {
                   color: Colors.green.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text("Your Account"),
+                child: const Text("Your Account"),
               )
             ],
           ),
@@ -185,7 +202,8 @@ class Profile extends StatelessWidget {
       child: ListTile(
         leading: Icon(icon, color: Colors.blue),
         title: Text(title, style: const TextStyle(fontSize: 16)),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+        trailing:
+            const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
         onTap: onTap,
       ),
     );
