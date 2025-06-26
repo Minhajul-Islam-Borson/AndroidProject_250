@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/ui/bottom_nav_pages/cart.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import '../const/AppColors.dart'; // Optional, if using ScreenUtil
 
 class ProductDetailsScreen extends StatefulWidget {

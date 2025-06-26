@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce/ui/checkout.dart';
 import 'package:flutter_ecommerce/ui/product_details_screen.dart';
-
 import '../bottom_nav_controller.dart';
 
 class Cart extends StatefulWidget {
@@ -22,7 +22,6 @@ class _CartState extends State<Cart> {
         appBar: AppBar(
           title: const Text("Cart Items"),
           backgroundColor: Colors.transparent,
-          automaticallyImplyLeading: false,
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
@@ -47,7 +46,6 @@ class _CartState extends State<Cart> {
       appBar: AppBar(
         title: const Text("Cart Items"),
         backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: false,
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
@@ -69,7 +67,7 @@ class _CartState extends State<Cart> {
             .doc(userEmail)
             .collection("items")
             .snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -84,14 +82,25 @@ class _CartState extends State<Cart> {
 
           final cartDocs = snapshot.data!.docs;
 
-          // Calculate totals
+          // Prepare data for checkout screen
           int totalItems = cartDocs.length;
           double totalPrice = 0;
+          List<Map<String, dynamic>> checkoutItems = [];
 
           for (var doc in cartDocs) {
             final data = doc.data() as Map<String, dynamic>;
             final price = double.tryParse(data['price'].toString()) ?? 0;
-            totalPrice += price;
+            final qty = data['qty'] ?? 1;
+            totalPrice += price * qty;
+
+            checkoutItems.add({
+              'name': data['name'],
+              'price': price,
+              'qty': qty,
+              'imgUrl': (data['images'] != null && data['images'].isNotEmpty)
+                  ? data['images'][0]
+                  : '',
+            });
           }
 
           return Column(
@@ -99,7 +108,7 @@ class _CartState extends State<Cart> {
               Expanded(
                 child: ListView.builder(
                   itemCount: cartDocs.length,
-                  itemBuilder: (_, index) {
+                  itemBuilder: (context, index) {
                     DocumentSnapshot documentSnapshot = cartDocs[index];
                     final data =
                         documentSnapshot.data() as Map<String, dynamic>;
@@ -109,14 +118,11 @@ class _CartState extends State<Cart> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProductDetailsScreen({
+                            builder: (_) => ProductDetailsScreen({
                               "product-name": data['name'],
                               "product-price": data['price'],
                               "product-img": data['images'],
-                              "product-description":
-                                  data.containsKey('description')
-                                      ? data['description']
-                                      : "",
+                              "product-description": data['description'] ?? "",
                             }),
                           ),
                         );
@@ -124,7 +130,7 @@ class _CartState extends State<Cart> {
                       child: Card(
                         margin: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 5),
-                        elevation: 4,
+                        elevation: 3,
                         child: ListTile(
                           leading: data['images'] != null &&
                                   data['images'].isNotEmpty
@@ -137,10 +143,9 @@ class _CartState extends State<Cart> {
                                       const Icon(Icons.broken_image),
                                 )
                               : const Icon(Icons.image_not_supported),
-                          title: Text(
-                            data['name'],
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                          title: Text(data['name'],
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
                           subtitle: Text("৳ ${data['price']}"),
                           trailing: IconButton(
                             icon: const Icon(Icons.delete, color: Colors.red),
@@ -159,6 +164,8 @@ class _CartState extends State<Cart> {
                   },
                 ),
               ),
+
+              //Total + Continue to Checkout Button
               SafeArea(
                 child: Container(
                   padding:
@@ -179,25 +186,30 @@ class _CartState extends State<Cart> {
                               style: const TextStyle(fontSize: 16)),
                           Text("Total: ৳${totalPrice.toStringAsFixed(2)}",
                               style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16)),
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
                         ],
                       ),
                       const SizedBox(height: 10),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
+                          onPressed: () {
+                            // Navigate to CheckoutScreen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => CheckoutScreen(
+                                  cartItems: checkoutItems,
+                                  totalPrice: totalPrice,
+                                ),
+                              ),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blueAccent,
                             padding: const EdgeInsets.symmetric(vertical: 15),
                           ),
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text(
-                                      "Continue to checkout not implemented.")),
-                            );
-                          },
-                          child: const Text("Continue",
+                          child: const Text("Continue to Checkout",
                               style: TextStyle(fontSize: 16)),
                         ),
                       ),

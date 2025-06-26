@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/my_location.dart';
-import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/settings.dart'as my_settings;
+import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/settings.dart'
+    as my_settings;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/total_order.dart';
 import '../bottom_nav_controller.dart';
 import '../login_screen.dart';
 
@@ -82,7 +83,13 @@ class Profile extends StatelessWidget {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
 
-              _buildOrderTile(Icons.inventory_2_outlined, "All Orders"),
+              _buildOrderTile(Icons.inventory_2_outlined, "All Orders",
+                  onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TotalOrderScreen()));
+              }),
               _buildOrderTile(Icons.my_location, "My Location", onTap: () {
                 Navigator.push(
                   context,

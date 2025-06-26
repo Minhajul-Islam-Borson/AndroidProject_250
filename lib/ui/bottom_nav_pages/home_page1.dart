@@ -4,7 +4,6 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/const/AppColors.dart';
-import 'package:flutter_ecommerce/ui/login_screen.dart';
 import 'package:flutter_ecommerce/ui/product_details_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
