@@ -23,8 +23,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   String _paymentMethod = 'Cash on Delivery';
   bool _isSubmitting = false;
 
-  // === CHANGED ===
-  // Fetch phone number from 'user-form-data' collection instead of 'users'
   Future<String?> _getUserPhoneNumber(String email) async {
     final docSnapshot = await FirebaseFirestore.instance
         .collection('user-form-data')
@@ -41,8 +39,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
     final userEmail = FirebaseAuth.instance.currentUser!.email!;
 
-    // === CHANGED ===
-    // Get phone from user-form-data collection
     final userPhone = await _getUserPhoneNumber(userEmail);
 
     final orderData = {
@@ -89,14 +85,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: SizedBox(
                   width: double.infinity,
+                  height: 50,
                   child: ElevatedButton(
                     onPressed: _placeOrder,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      backgroundColor: Colors.blueAccent,
+                      backgroundColor: Colors.orange,
                     ),
                     child: const Text('Place Order',
-                        style: TextStyle(fontSize: 16)),
+                        style: TextStyle(fontSize: 16, color: Colors.white)),
                   ),
                 ),
               ),
@@ -123,9 +120,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         onSaved: (v) => _address = v!.trim(),
                       ),
                       const SizedBox(height: 16),
-
-                      // Removed phone number input from UI
-                      // because phone will be auto fetched from Firestore
 
                       ExpansionTile(
                         title: Text(
@@ -173,6 +167,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               child: Text('Cash on Delivery')),
                           DropdownMenuItem(
                               value: 'Bkash', child: Text('Bkash')),
+                          DropdownMenuItem(
+                              value: 'Nagad', child: Text('Nagad')),
+                          DropdownMenuItem(
+                              value: 'Rocket', child: Text('Rocket')),
                         ],
                         onChanged: (v) =>
                             setState(() => _paymentMethod = v ?? ''),

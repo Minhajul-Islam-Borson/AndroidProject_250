@@ -3,7 +3,6 @@ import 'package:flutter_ecommerce/ui/bottom_nav_pages/cart.dart';
 import 'package:flutter_ecommerce/ui/bottom_nav_pages/favourite.dart';
 import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-
 import 'bottom_nav_pages/home_page1.dart';
 
 class BottomNavController extends StatefulWidget {

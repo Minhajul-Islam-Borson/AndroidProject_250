@@ -1,4 +1,4 @@
-import 'package:carousel_slider/carousel_slider.dart'; // single import for carousel
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,15 +24,15 @@ class _HomePage1State extends State<HomePage1> {
   final List<Map<String, dynamic>> _products = [];
   final _firestoreInstance = FirebaseFirestore.instance;
 
-  // Fetch images from Firestore collection "home-slider"
   fetchCarouselImages() async {
     QuerySnapshot qn = await _firestoreInstance.collection("home-slider").get();
 
     setState(() {
-      _carouselImages = qn.docs.map((doc) => doc["img-path"] as String).toList();
-      print(_carouselImages); // For debugging, remove in production
+      _carouselImages =
+          qn.docs.map((doc) => doc["img-path"] as String).toList();
     });
   }
+
   fetchProducts() async {
     QuerySnapshot qn = await _firestoreInstance.collection("products").get();
     setState(() {
@@ -48,6 +48,7 @@ class _HomePage1State extends State<HomePage1> {
 
     return qn.docs;
   }
+
   @override
   void initState() {
     super.initState();
@@ -57,7 +58,7 @@ class _HomePage1State extends State<HomePage1> {
 
   @override
   void dispose() {
-    _searchController.dispose(); // Dispose controller properly
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -72,7 +73,6 @@ class _HomePage1State extends State<HomePage1> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Search bar row
               Row(
                 children: [
                   Expanded(
@@ -125,51 +125,49 @@ class _HomePage1State extends State<HomePage1> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        CupertinoPageRoute(builder: (context) => SearchScreen()),
+                        CupertinoPageRoute(
+                            builder: (context) => SearchScreen()),
                       );
                     },
                   ),
                 ],
               ),
               SizedBox(height: 20.h),
-              // Carousel slider or loading indicator if no images yet
               AspectRatio(
                 aspectRatio: 3.5,
                 child: hasImages
                     ? CarouselSlider(
-                  items: _carouselImages
-                      .map(
-                        (item) => Padding(
-                      padding:
-                      const EdgeInsets.symmetric(horizontal: 3),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12.r), // Rounded corners
-                            child: Image.network(
-                              item,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                            ),
-                          ),
-                    ),
-                  )
-                      .toList(),
-                  options: CarouselOptions(
-                    autoPlay: false,
-                    enlargeCenterPage: true,
-                    //enlargeFactor: 0.25,
-                    viewportFraction: 0.8,
-                    enlargeStrategy: CenterPageEnlargeStrategy.scale,
-                    onPageChanged: (val, _) {
-                      setState(() {
-                        _dotPosition = val;
-                      });
-                    },
-                  ),
-                )
+                        items: _carouselImages
+                            .map(
+                              (item) => Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 3),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  child: Image.network(
+                                    item,
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                        options: CarouselOptions(
+                          autoPlay: false,
+                          enlargeCenterPage: true,
+                          viewportFraction: 0.8,
+                          enlargeStrategy: CenterPageEnlargeStrategy.scale,
+                          onPageChanged: (val, _) {
+                            setState(() {
+                              _dotPosition = val;
+                            });
+                          },
+                        ),
+                      )
                     : Center(child: CircularProgressIndicator()),
               ),
               SizedBox(height: 10.h),
-              // Dots indicator showing current position or single dot when loading
               Center(
                 child: DotsIndicator(
                   dotsCount: hasImages ? _carouselImages.length : 1,
@@ -183,34 +181,77 @@ class _HomePage1State extends State<HomePage1> {
                   ),
                 ),
               ),
-              SizedBox( height:  10.h),
-              Text("View Product", style: TextStyle(
-                color: Color(0xFFFF9800),
-                fontSize: 10.sp,
-                fontWeight: FontWeight.bold,
-                fontStyle: FontStyle.italic,
-              ),),
-              SizedBox( height: 10.h,),
+              SizedBox(height: 10.h),
+              Text(
+                "View Product",
+                style: TextStyle(
+                  color: Color(0xFFFF9800),
+                  fontSize: 10.sp,
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+              SizedBox(height: 10.h),
               Expanded(
                 child: GridView.builder(
                   itemCount: _products.length,
-                  //itemCount: 10,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 1),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.75, // ↓ adjusted from 1 to 0.75
+                  ),
                   itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetailsScreen(_products[index]))),
-                      child: Card(
-                        elevation: 3,
-                        child: Column(
-                          children: [
-                            AspectRatio(aspectRatio: 1.3,
-                              child: Container(
-                                color: Colors.orange,
-                                  child: Image.network(_products[index]["product-img"][0])),),
-                            Text("${_products[index]["product-name"]}"),
-                            Text("৳${_products[index]["product-price"].toString()}"),
-                          ],
-                        )
+                    return Padding(
+                      padding: EdgeInsets.all(5),
+                      child: GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ProductDetailsScreen(_products[index]),
+                          ),
+                        ),
+                        child: Card(
+                          elevation: 3,
+                          child: Column(
+                            crossAxisAlignment:
+                                CrossAxisAlignment.start, // ← added
+                            children: [
+                              AspectRatio(
+                                aspectRatio: 1.2,
+                                child: Container(
+                                  color: Colors.orange,
+                                  child: Image.network(
+                                    _products[index]["product-img"][0],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6.0, vertical: 4),
+                                child: Text(
+                                  "${_products[index]["product-name"]}",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  maxLines: 1, // ← added
+                                  overflow: TextOverflow.ellipsis, // ← added
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 6.0),
+                                child: Text(
+                                  "৳${_products[index]["product-price"].toString()}",
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.black87),
+                                  maxLines: 1, // ← added
+                                  overflow: TextOverflow.ellipsis, // ← added
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     );
                   },

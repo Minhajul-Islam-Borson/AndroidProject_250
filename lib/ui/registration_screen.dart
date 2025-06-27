@@ -20,34 +20,43 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
 
-  signUp() async{
+  signUp() async {
+    if (_passwordController.text.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Password must be at least 6 characters long"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
       var authCredential = userCredential.user;
       print(authCredential!.uid);
-      if(authCredential.uid.isNotEmpty){
-        Navigator.push(context, CupertinoPageRoute(builder: (context)=>UserForm()));
-      }
-      else{
+      if (authCredential.uid.isNotEmpty) {
+        Navigator.push(
+            context, CupertinoPageRoute(builder: (context) => UserForm()));
+      } else {
         Fluttertoast.showToast(msg: "Something is wrong");
       }
-
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         //print('The password provided is too weak.');
         Fluttertoast.showToast(msg: "The password provided is too weak.");
       } else if (e.code == 'email-already-in-use') {
         //print('The account already exists for that email.');
-        Fluttertoast.showToast(msg: "The account already exists for that email.");
+        Fluttertoast.showToast(
+            msg: "The account already exists for that email.");
       }
     } catch (e) {
       print(e);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -187,15 +196,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ],
                         ),*/
 
-                        SizedBox(height: 10.h,),
+                        SizedBox(
+                          height: 10.h,
+                        ),
                         Row(
                           children: [
                             Container(
                               height: 48.h,
                               width: 41.w,
                               decoration: BoxDecoration(
-                                  color: AppColors.orange,
-                                  borderRadius: BorderRadius.circular(12.r),
+                                color: AppColors.orange,
+                                borderRadius: BorderRadius.circular(12.r),
                               ),
                               child: Center(
                                 child: Icon(
@@ -225,25 +236,25 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   ),
                                   suffixIcon: _obscureText == true
                                       ? IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _obscureText = false;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        Icons.remove_red_eye,
-                                        size: 20.w,
-                                      ))
+                                          onPressed: () {
+                                            setState(() {
+                                              _obscureText = false;
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.remove_red_eye,
+                                            size: 20.w,
+                                          ))
                                       : IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _obscureText = true;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        Icons.visibility_off,
-                                        size: 20.w,
-                                      )),
+                                          onPressed: () {
+                                            setState(() {
+                                              _obscureText = true;
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.visibility_off,
+                                            size: 20.w,
+                                          )),
                                 ),
                               ),
                             ),

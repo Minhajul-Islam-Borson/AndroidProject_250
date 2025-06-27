@@ -8,7 +8,7 @@ class UserForm extends StatefulWidget {
 
   @override
   State<UserForm> createState() => _UserFormState();
-} final _formKey = GlobalKey<FormState>();
+}
 
 class _UserFormState extends State<UserForm> {
   final _formKey = GlobalKey<FormState>();

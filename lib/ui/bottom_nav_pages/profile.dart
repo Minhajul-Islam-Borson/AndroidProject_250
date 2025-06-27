@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/my_location.dart';
+import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/policies.dart';
 import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/settings.dart'
     as my_settings;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/total_order.dart';
+import 'package:flutter_ecommerce/ui/forgot_password_page.dart';
 import '../bottom_nav_controller.dart';
 import '../login_screen.dart';
 
@@ -46,9 +48,7 @@ class Profile extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (_) => const my_settings
-                        .Settings()), //Open Settings from AppBar
+                MaterialPageRoute(builder: (_) => const my_settings.Settings()),
               );
             },
           ),
@@ -96,13 +96,26 @@ class Profile extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const MyLocation()),
                 );
               }),
-              _buildOrderTile(Icons.payment, "Payment Method"),
+              //_buildOrderTile(Icons.payment, "Payment Method"),
 
               _buildOrderTile(Icons.settings, "Settings", onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => const my_settings.Settings()),
+                );
+              }),
+
+              _buildOrderTile(Icons.security, "Reset Password", onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => ForgotPasswordPage()),
+                );
+              }),
+              _buildOrderTile(Icons.policy, "Policies", onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => Policies()),
                 );
               }),
 

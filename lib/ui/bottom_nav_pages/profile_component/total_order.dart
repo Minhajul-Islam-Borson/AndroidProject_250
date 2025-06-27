@@ -32,7 +32,6 @@ class _TotalOrderScreenState extends State<TotalOrderScreen> {
         ),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        // ✅ Query filtering orders by user's email and ordering by timestamp descending
         stream: FirebaseFirestore.instance
             .collection('orders')
             .where('email', isEqualTo: userEmail)

@@ -192,6 +192,7 @@ class _CartState extends State<Cart> {
                       const SizedBox(height: 10),
                       SizedBox(
                         width: double.infinity,
+                        height: 50,
                         child: ElevatedButton(
                           onPressed: () {
                             // Navigate to CheckoutScreen
@@ -206,11 +207,11 @@ class _CartState extends State<Cart> {
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blueAccent,
+                            backgroundColor: Colors.orange,
                             padding: const EdgeInsets.symmetric(vertical: 15),
                           ),
                           child: const Text("Continue to Checkout",
-                              style: TextStyle(fontSize: 16)),
+                              style: TextStyle(fontSize: 16,color: Colors.white)),
                         ),
                       ),
                     ],
