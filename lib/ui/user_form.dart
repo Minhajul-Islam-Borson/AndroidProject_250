@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce/const/AppColors.dart';
 import 'package:flutter_ecommerce/ui/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserForm extends StatefulWidget {
   const UserForm({super.key});
 
@@ -19,19 +21,24 @@ class _UserFormState extends State<UserForm> {
   final TextEditingController _genderController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
 
-  sendUserDataToDB()async{
-
+  sendUserDataToDB() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     var currentUser = auth.currentUser;
 
-    CollectionReference collectionRef = FirebaseFirestore.instance.collection("user-form-data");
-    return collectionRef.doc(currentUser!.email).set({
-      "name":_nameController.text,
-      "phone":_phoneController.text,
-      "dob": _dobController.text,
-      "gender": _genderController.text,
-      "age": _ageController.text,
-    }).then((value) => Navigator.push(context,MaterialPageRoute(builder: (_)=> LoginScreen()))) .catchError((error)=>print("Object not found"));
+    CollectionReference collectionRef =
+        FirebaseFirestore.instance.collection("user-form-data");
+    return collectionRef
+        .doc(currentUser!.email)
+        .set({
+          "name": _nameController.text,
+          "phone": _phoneController.text,
+          "dob": _dobController.text,
+          "gender": _genderController.text,
+          "age": _ageController.text,
+        })
+        .then((value) => Navigator.push(
+            context, MaterialPageRoute(builder: (_) => LoginScreen())))
+        .catchError((error) => print("Object not found"));
   }
 
   @override
@@ -46,7 +53,10 @@ class _UserFormState extends State<UserForm> {
               children: [
                 Text(
                   "Submit the form to continue.",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.red),
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red),
                 ),
                 SizedBox(height: 5),
                 Text(
@@ -60,7 +70,9 @@ class _UserFormState extends State<UserForm> {
                     children: [
                       TextFormField(
                         controller: _nameController,
-                        decoration: InputDecoration(labelText: "Full Name",),
+                        decoration: InputDecoration(
+                          labelText: "Full Name",
+                        ),
                       ),
                       SizedBox(height: 10),
                       TextFormField(
@@ -95,15 +107,17 @@ class _UserFormState extends State<UserForm> {
                       SizedBox(height: 20),
                       SizedBox(
                         width: double.infinity,
+                        height: 50,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
+                            backgroundColor: AppColors.orange,
                             padding: EdgeInsets.symmetric(vertical: 15),
                           ),
                           onPressed: () {
                             sendUserDataToDB();
                           },
-                          child: Text("Submit", style: TextStyle(color: Colors.white)),
+                          child: Text("Submit",
+                              style: TextStyle(color: Colors.white)),
                         ),
                       ),
                     ],

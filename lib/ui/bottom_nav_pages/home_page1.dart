@@ -197,7 +197,7 @@ class _HomePage1State extends State<HomePage1> {
                   itemCount: _products.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 0.75, // ↓ adjusted from 1 to 0.75
+                    childAspectRatio: 0.75,
                   ),
                   itemBuilder: (context, index) {
                     return Padding(
@@ -214,7 +214,7 @@ class _HomePage1State extends State<HomePage1> {
                           elevation: 3,
                           child: Column(
                             crossAxisAlignment:
-                                CrossAxisAlignment.start, // ← added
+                                CrossAxisAlignment.start, //added
                             children: [
                               AspectRatio(
                                 aspectRatio: 1.2,
@@ -234,8 +234,8 @@ class _HomePage1State extends State<HomePage1> {
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                   ),
-                                  maxLines: 1, // ← added
-                                  overflow: TextOverflow.ellipsis, // ← added
+                                  maxLines: 1, 
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               Padding(
@@ -245,8 +245,8 @@ class _HomePage1State extends State<HomePage1> {
                                   "৳${_products[index]["product-price"].toString()}",
                                   style: TextStyle(
                                       fontSize: 14, color: Colors.black87),
-                                  maxLines: 1, // ← added
-                                  overflow: TextOverflow.ellipsis, // ← added
+                                  maxLines: 1, 
+                                  overflow: TextOverflow.ellipsis, 
                                 ),
                               ),
                             ],

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/my_location.dart';
 import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/policies.dart';
-import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/settings.dart'
-    as my_settings;
+import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/settings.dart' as my_settings;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_ecommerce/ui/bottom_nav_pages/profile_component/total_order.dart';
@@ -20,7 +19,7 @@ class Profile extends StatelessWidget {
     final userEmail = user?.email;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      //backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: const Text(
@@ -106,7 +105,7 @@ class Profile extends StatelessWidget {
                 );
               }),
 
-              _buildOrderTile(Icons.security, "Reset Password", onTap: () {
+              _buildOrderTile(Icons.security, "Forget Password", onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => ForgotPasswordPage()),

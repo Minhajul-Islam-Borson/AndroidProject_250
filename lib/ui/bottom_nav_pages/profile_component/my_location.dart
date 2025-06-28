@@ -13,11 +13,11 @@ class MyLocation extends StatefulWidget {
 }
 
 class _MyLocationState extends State<MyLocation> {
-  late GoogleMapController _mapController; // ✅ non-nullable
+  late GoogleMapController _mapController;
   Set<Marker> _markers = {};
 
   static const CameraPosition _initialPosition = CameraPosition(
-    target: LatLng(37.7749, -122.4194), // San Francisco default
+    target: LatLng(37.7749, -122.4194), 
     zoom: 10,
   );
 
@@ -60,8 +60,6 @@ class _MyLocationState extends State<MyLocation> {
     );
 
     LatLng userLatLng = LatLng(position.latitude, position.longitude);
-
-    // ✅ Preserve current zoom level
     double currentZoom = await _mapController.getZoomLevel();
 
     _mapController.animateCamera(
@@ -115,7 +113,7 @@ class _MyLocationState extends State<MyLocation> {
             initialCameraPosition: _initialPosition,
             markers: _markers,
             myLocationEnabled: true,
-            myLocationButtonEnabled: false, // Hide default button
+            myLocationButtonEnabled: false, 
           ),
           Positioned(
             bottom: 20,

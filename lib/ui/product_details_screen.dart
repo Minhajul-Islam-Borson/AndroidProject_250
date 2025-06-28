@@ -19,7 +19,7 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int _dotPosition = 0;
 
-  // Fix: add null check for currentUser before adding to cart
+  //add null check for currentUser before adding to cart
   Future addToCart() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     var currentUser = auth.currentUser;
@@ -51,7 +51,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ));
   }
 
-  // Fix: add null check for currentUser before adding to favourite
+  //add null check for currentUser before adding to favourite
   Future addToFavourite() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     var currentUser = auth.currentUser;

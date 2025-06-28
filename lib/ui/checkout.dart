@@ -55,7 +55,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final docRef =
         await FirebaseFirestore.instance.collection('orders').add(orderData);
 
-    // Clear user cart
+    //clear user cart
     final cartCol = FirebaseFirestore.instance
         .collection('users-cart-items')
         .doc(userEmail)
